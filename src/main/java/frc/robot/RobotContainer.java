@@ -31,8 +31,8 @@ public class RobotContainer {
     .whileTrue(Commands.run(() -> {
       double leftStick = controller.getLeftY();
       double rightStick = controller.getRightY();
-      driveSystem.leftDrive(leftStick);
-      driveSystem.leftDrive(rightStick);
+      driveSystem.leftDrive(-leftStick);
+      driveSystem.rightDrive(rightStick);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
