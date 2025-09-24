@@ -55,11 +55,17 @@ public class RobotContainer {
 
 
     //FIRE CANNON trigger. TODO: Make a defined wait period to pervent rapid fire.
-    new Trigger(() -> controller.getAButton())
+    new Trigger(() -> controller.getAButton()) //Change the fire mode to two buttons for debug
     .whileTrue(
       new InstantCommand(() -> 
-      turrentSubSystem.fire()
+      turrentSubSystem.fire(true)
     ));
+    new Trigger(() -> controller.getYButton())
+    .whileTrue(
+      new InstantCommand(() -> 
+      turrentSubSystem.fire(false)
+    ));
+    
     
     // Bring Controller Up & Down
     new Trigger(() -> controller.getXButton()).whileTrue(new InstantCommand(() -> 
