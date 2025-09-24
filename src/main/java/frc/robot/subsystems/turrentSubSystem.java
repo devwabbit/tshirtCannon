@@ -22,7 +22,7 @@ public class turrentSubSystem extends SubsystemBase{
     public void fire(boolean bool) {
         solenoid.set(true);
         System.out.println("Debug message: Solenoid FIre "+bool);
-                new WaitCommand(1)
+                new WaitCommand(.2)
             .andThen(new InstantCommand(() -> {
                 solenoid.set(false);
                 System.out.println("Solenoid fire end");
