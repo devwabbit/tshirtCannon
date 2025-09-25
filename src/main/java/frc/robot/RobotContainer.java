@@ -14,6 +14,8 @@ import frc.robot.subsystems.turrentSubSystem;
 
 
 public class RobotContainer {
+  public boolean slowmode = false;
+  public double slowmodeval = 1;
   XboxController controller = new XboxController(0);
 
   public final driveSubSystem driveSystem = new driveSubSystem();
@@ -31,8 +33,8 @@ public class RobotContainer {
     .whileTrue(Commands.run(() -> {
       double leftStick = controller.getLeftY();
       double rightStick = controller.getRightY();
-      driveSystem.leftDrive(-leftStick);
-      driveSystem.rightDrive(rightStick);
+      driveSystem.leftDrive(-leftStick*slowmodeval);
+      driveSystem.rightDrive(rightStick*slowmodeval);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
@@ -42,28 +44,35 @@ public class RobotContainer {
         driveSystem.rightDrive(0);
       })
     );
-    
+
+    new Trigger(() -> controller.getStartButtonPressed()).whileTrue(Commands.runOnce(() -> {
+      slowmode = !slowmode;
+      if (slowmode){
+        slowmodeval = .5;
+      } else {
+        slowmodeval = 1;
+      }
+      System.out.println("slowmode: "+slowmode+" val: "+slowmodeval);
+    }));
+
     //Turn Turrent Left & Right
     new Trigger(() -> controller.getRightBumperButton()).whileTrue(new InstantCommand(() -> 
-    turrentSubSystem.turnTurrent(-1)
+    turrentSubSystem.turnTurrent(-.05)
     ));
-    new Trigger(() -> controller.getRightBumperButton()).whileTrue(new InstantCommand(() -> 
-    turrentSubSystem.turnTurrent(1)
+    new Trigger(() -> controller.getLeftBumperButton()).whileTrue(new InstantCommand(() -> 
+    turrentSubSystem.turnTurrent(.05)
     ));
-
+    new Trigger(() -> controller.getRightBumperButtonReleased() || controller.getLeftBumperButtonReleased()).whileTrue(new InstantCommand(() -> 
+    turrentSubSystem.turnTurrent(0)
+    ));
 
 
 
     //FIRE CANNON trigger. TODO: Make a defined wait period to pervent rapid fire.
-    new Trigger(() -> controller.getAButton()) //Change the fire mode to two buttons for debug
-    .whileTrue(
-      new InstantCommand(() -> 
-      turrentSubSystem.fire(true)
-    ));
     new Trigger(() -> controller.getYButton())
     .whileTrue(
       new InstantCommand(() -> 
-      turrentSubSystem.fire(false)
+      turrentSubSystem.fire()
     ));
     
     
@@ -71,8 +80,13 @@ public class RobotContainer {
     new Trigger(() -> controller.getXButton()).whileTrue(new InstantCommand(() -> 
     turrentSubSystem.cannonGoUpDown(1)
     ));
+
     new Trigger(() -> controller.getBButton()).whileTrue(new InstantCommand(() -> 
     turrentSubSystem.cannonGoUpDown(-1)
+    ));
+
+    new Trigger(() -> controller.getXButtonReleased() || controller.getBButtonReleased()).whileTrue(new InstantCommand(() -> 
+    turrentSubSystem.cannonGoUpDown(0)
     ));
     // .whileFalse(new InstantCommand(()->turrentSubSystem.cannonGoUpDown(0)));
 

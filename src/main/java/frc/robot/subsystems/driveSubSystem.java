@@ -11,7 +11,7 @@ public class driveSubSystem extends SubsystemBase {
     public final SparkMax right2 = new SparkMax(2, MotorType.kBrushed);
     public final SparkMax left1 = new SparkMax(3, MotorType.kBrushed);
     public final SparkMax left2 = new SparkMax(4, MotorType.kBrushed);
-
+    
 
     // public driveSubSystem(XboxController xboxController) {
     // }
@@ -22,6 +22,7 @@ public class driveSubSystem extends SubsystemBase {
     }
 
     public void rightDrive(double speed) {
+
         right1.set(speed);
         right2.set(speed);
     }
