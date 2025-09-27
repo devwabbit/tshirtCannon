@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -16,16 +17,19 @@ import frc.robot.subsystems.turrentSubSystem;
 public class RobotContainer {
   public boolean slowmode = false;
   public double slowmodeval = 1;
+  public boolean safetyFire = false;
   XboxController controller = new XboxController(0);
 
   public final driveSubSystem driveSystem = new driveSubSystem();
   public final turrentSubSystem turrentSubSystem = new turrentSubSystem();
-
+  
   public RobotContainer() {
     configureBindings();
   }
 
   private void configureBindings() {
+    turrentSubSystem.lights(0.61);
+    
     //DRIVE
     new Trigger(() -> 
       Math.abs(controller.getLeftY()) > 0.1 || 
@@ -33,8 +37,8 @@ public class RobotContainer {
     .whileTrue(Commands.run(() -> {
       double leftStick = controller.getLeftY();
       double rightStick = controller.getRightY();
-      driveSystem.leftDrive(-leftStick*slowmodeval);
-      driveSystem.rightDrive(rightStick*slowmodeval);
+      driveSystem.leftDrive(-leftStick);
+      driveSystem.rightDrive(rightStick);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
@@ -57,23 +61,36 @@ public class RobotContainer {
 
     //Turn Turrent Left & Right
     new Trigger(() -> controller.getRightBumperButton()).whileTrue(new InstantCommand(() -> 
-    turrentSubSystem.turnTurrent(-.05)
+    turrentSubSystem.turnTurrent(-.1)
     ));
     new Trigger(() -> controller.getLeftBumperButton()).whileTrue(new InstantCommand(() -> 
-    turrentSubSystem.turnTurrent(.05)
+    turrentSubSystem.turnTurrent(.1)
     ));
     new Trigger(() -> controller.getRightBumperButtonReleased() || controller.getLeftBumperButtonReleased()).whileTrue(new InstantCommand(() -> 
     turrentSubSystem.turnTurrent(0)
     ));
 
-
+    new Trigger(() -> controller.getLeftTriggerAxis() > .8 ).whileTrue(new InstantCommand(() -> {
+      safetyFire = true;
+      turrentSubSystem.lights(-0.11);
+    }));
+    new Trigger(() -> controller.getLeftTriggerAxis() < .8).whileTrue(new InstantCommand(() -> {
+      safetyFire = false;
+      turrentSubSystem.lights(0.61);
+    }));
+    new Trigger(() -> controller.getRightTriggerAxis() > .8).whileTrue(new InstantCommand(() -> {
+      if (safetyFire == true) {
+        turrentSubSystem.fire();
+      }
+    }));
+    
 
     //FIRE CANNON trigger. TODO: Make a defined wait period to pervent rapid fire.
-    new Trigger(() -> controller.getYButton())
-    .whileTrue(
-      new InstantCommand(() -> 
-      turrentSubSystem.fire()
-    ));
+    // new Trigger(() -> controller.getYButton())
+    // .whileTrue(
+    //   new InstantCommand(() -> 
+    //   turrentSubSystem.fire()
+    // ));
     
     
     // Bring Controller Up & Down

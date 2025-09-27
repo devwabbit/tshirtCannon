@@ -12,13 +12,18 @@ import java.lang.management.MemoryType;
 
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class turrentSubSystem extends SubsystemBase{
     
     public final SparkMax turrent = new SparkMax(5, MotorType.kBrushless);
     public final SparkMax cannonUpDown = new SparkMax(10, MotorType.kBrushed);
+    public final PWMSparkMax lights = new PWMSparkMax(1);
+    // public final PWM lights = new PWM(1);
     // public final PWMTalonFX cannonUpDown = new PWMTalonFX(0);
     // public final PWMTalonSRX cannonUpDown = new PWMTalonSRX(0);
     // public final TalonSRX cannonUpDown = new TalonSRX(6);
@@ -44,6 +49,11 @@ public class turrentSubSystem extends SubsystemBase{
     */
     public void turnTurrent(double turn) {
         turrent.set(turn);
+    }
+    
+    public void lights(double pwmOutput) {
+        lights.set(pwmOutput);
+
     }
 
     public void cannonGoUpDown(double upDown) {
