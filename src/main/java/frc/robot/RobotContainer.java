@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.driveSubSystem;
 import frc.robot.subsystems.turrentSubSystem;
-
+import frc.robot.subsystems.ledControllerSubSystem;
 
 public class RobotContainer {
   public boolean slowmode = false;
@@ -22,13 +22,14 @@ public class RobotContainer {
 
   public final driveSubSystem driveSystem = new driveSubSystem();
   public final turrentSubSystem turrentSubSystem = new turrentSubSystem();
+  public final ledControllerSubSystem ledSystem = new ledControllerSubSystem();
   
   public RobotContainer() {
     configureBindings();
+    updateSmartDashboard();
   }
 
   private void configureBindings() {
-    turrentSubSystem.lights(0.61);
     
     //DRIVE
     new Trigger(() -> 
@@ -37,8 +38,8 @@ public class RobotContainer {
     .whileTrue(Commands.run(() -> {
       double leftStick = controller.getLeftY();
       double rightStick = controller.getRightY();
-      driveSystem.leftDrive(-leftStick);
-      driveSystem.rightDrive(rightStick);
+      driveSystem.leftDrive(-leftStick*slowmodeval);
+      driveSystem.rightDrive(rightStick*slowmodeval);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
@@ -70,27 +71,20 @@ public class RobotContainer {
     turrentSubSystem.turnTurrent(0)
     ));
 
+    // Fire Cannon
     new Trigger(() -> controller.getLeftTriggerAxis() > .8 ).whileTrue(new InstantCommand(() -> {
       safetyFire = true;
-      turrentSubSystem.lights(-0.11);
+      ledSystem.lights(-0.11);
     }));
     new Trigger(() -> controller.getLeftTriggerAxis() < .8).whileTrue(new InstantCommand(() -> {
       safetyFire = false;
-      turrentSubSystem.lights(0.61);
+      ledSystem.lights(0.61);
     }));
     new Trigger(() -> controller.getRightTriggerAxis() > .8).whileTrue(new InstantCommand(() -> {
       if (safetyFire == true) {
         turrentSubSystem.fire();
       }
     }));
-    
-
-    //FIRE CANNON trigger. TODO: Make a defined wait period to pervent rapid fire.
-    // new Trigger(() -> controller.getYButton())
-    // .whileTrue(
-    //   new InstantCommand(() -> 
-    //   turrentSubSystem.fire()
-    // ));
     
     
     // Bring Controller Up & Down
@@ -105,16 +99,30 @@ public class RobotContainer {
     new Trigger(() -> controller.getXButtonReleased() || controller.getBButtonReleased()).whileTrue(new InstantCommand(() -> 
     turrentSubSystem.cannonGoUpDown(0)
     ));
-    // .whileFalse(new InstantCommand(()->turrentSubSystem.cannonGoUpDown(0)));
-
-
-
-
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
+
+
+  public void updateSmartDashboard() {
+    double leftStick = controller.getLeftY();
+    double rightStick = controller.getRightY();
+    // Periodically update SmartDashboard values
+    SmartDashboard.putBoolean("Slow Mode", slowmode);
+    SmartDashboard.putBoolean("Safety Fire", safetyFire);
+    SmartDashboard.putNumber("Slow Mode Value", slowmodeval);
+    SmartDashboard.putNumber("leftStick", leftStick);
+    SmartDashboard.putNumber("rightStick", rightStick);
+
+    // Retrieve updated values from SmartDashboard
+    slowmode = SmartDashboard.getBoolean("Slow Mode", slowmode);
+    safetyFire = SmartDashboard.getBoolean("Safety Fire", safetyFire);
+    slowmodeval = SmartDashboard.getNumber("Slow Mode Value", slowmodeval);
+  }
+
+
 
   public Command getDrive(double stickLeft, double stickRight) {
     return Commands.run(() -> {
