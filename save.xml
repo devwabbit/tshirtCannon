@@ -1,0 +1,54 @@
+<xml version="1.0">
+<dashboard>
+	<widget field=" light OverRide " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="701" y="79"/>
+	</widget>
+	<widget field=" Safety Fire " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="-7" y="106"/>
+		<width>209</width>
+		<height>107</height>
+	</widget>
+	<widget field=" Slow Mode " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="-6" y="211"/>
+		<width>209</width>
+		<height>108</height>
+	</widget>
+	<widget field=" Overide Value " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="635" y="36"/>
+		<width>186</width>
+		<height>42</height>
+	</widget>
+	<widget field=" Slow Mode Value " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="288" y="-2"/>
+		<width>199</width>
+		<height>50</height>
+	</widget>
+	<widget field=" Current Light Value " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="611" y="-3"/>
+		<width>209</width>
+		<height>40</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="870" y="0"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="-2" y="-1"/>
+		<width>148</width>
+		<height>109</height>
+	</static-widget>
+	<widget field="rightStick" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="335" y="66"/>
+	</widget>
+	<widget field="leftStick" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="339" y="48"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Slow Mode Value"/>
+	<hidden field="Safety Fire"/>
+	<hidden field="Overide Value"/>
+	<hidden field="Slow Mode"/>
+	<hidden field="Current Light Value"/>
+	<hidden field="light OverRide"/>
+</xml>

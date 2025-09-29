@@ -10,19 +10,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.LEDv2;
 import frc.robot.subsystems.driveSubSystem;
 import frc.robot.subsystems.turrentSubSystem;
-import frc.robot.subsystems.ledControllerSubSystem;
 
 public class RobotContainer {
   public boolean slowmode = false;
   public double slowmodeval = 1;
   public boolean safetyFire = false;
   XboxController controller = new XboxController(0);
+  
 
   public final driveSubSystem driveSystem = new driveSubSystem();
   public final turrentSubSystem turrentSubSystem = new turrentSubSystem();
-  public final ledControllerSubSystem ledSystem = new ledControllerSubSystem();
+  //public final ledControllerSubSystem ledSystem = new ledControllerSubSystem();
+  public final LEDv2 lightSystem = new LEDv2();
   
   public RobotContainer() {
     configureBindings();
@@ -40,6 +42,8 @@ public class RobotContainer {
       double rightStick = controller.getRightY();
       driveSystem.leftDrive(-leftStick*slowmodeval);
       driveSystem.rightDrive(rightStick*slowmodeval);
+      SmartDashboard.putNumber("leftStick", leftStick);
+      SmartDashboard.putNumber("rightStick", rightStick);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
@@ -74,11 +78,11 @@ public class RobotContainer {
     // Fire Cannon
     new Trigger(() -> controller.getLeftTriggerAxis() > .8 ).whileTrue(new InstantCommand(() -> {
       safetyFire = true;
-      ledSystem.lights(-0.11);
+      lightSystem.setlightMode(-0.11);
     }));
     new Trigger(() -> controller.getLeftTriggerAxis() < .8).whileTrue(new InstantCommand(() -> {
       safetyFire = false;
-      ledSystem.lights(0.61);
+      lightSystem.setlightMode(0.61);
     }));
     new Trigger(() -> controller.getRightTriggerAxis() > .8).whileTrue(new InstantCommand(() -> {
       if (safetyFire == true) {
@@ -107,27 +111,33 @@ public class RobotContainer {
 
 
   public void updateSmartDashboard() {
-    double leftStick = controller.getLeftY();
-    double rightStick = controller.getRightY();
-    // Periodically update SmartDashboard values
-    SmartDashboard.putBoolean("Slow Mode", slowmode);
-    SmartDashboard.putBoolean("Safety Fire", safetyFire);
-    SmartDashboard.putNumber("Slow Mode Value", slowmodeval);
-    SmartDashboard.putNumber("leftStick", leftStick);
-    SmartDashboard.putNumber("rightStick", rightStick);
+    //Local Varibles to act as defaults
+    double lightOverideVal = 0.61;
+    boolean lightOverideBol = false;
 
-    // Retrieve updated values from SmartDashboard
-    slowmode = SmartDashboard.getBoolean("Slow Mode", slowmode);
-    safetyFire = SmartDashboard.getBoolean("Safety Fire", safetyFire);
-    slowmodeval = SmartDashboard.getNumber("Slow Mode Value", slowmodeval);
+    // Check Changes
+    // slowmode = SmartDashboard.getBoolean("Slow Mode", slowmode);
+    // safetyFire = SmartDashboard.getBoolean("Safety Fire", safetyFire);
+    slowmodeval = SmartDashboard.getNumber(" Slow Mode Value ", slowmodeval);
+    lightOverideVal = SmartDashboard.getNumber(" Overide Value ", lightOverideVal);
+    lightOverideBol = SmartDashboard.getBoolean(" light OverRide ", lightOverideBol);
+    lightSystem.debug(lightOverideBol, lightOverideVal);
+
+    // Set Data To Board
+    SmartDashboard.putNumber(" Current Light Value ", lightSystem.lastSetLightVal);
+    SmartDashboard.putBoolean(" Slow Mode ", slowmode);
+    SmartDashboard.putBoolean(" Safety Fire ", safetyFire);
+    SmartDashboard.putNumber(" Slow Mode Value ", slowmodeval);
+    SmartDashboard.putBoolean(" light OverRide ", lightOverideBol);
+    SmartDashboard.putNumber(" Overide Value ", lightOverideVal);
   }
 
 
 
-  public Command getDrive(double stickLeft, double stickRight) {
-    return Commands.run(() -> {
-      // Example: Add logic to drive using stickLeft and stickRight xxxxxxxxvalues
-      System.out.println("Driving with left stick: " + stickLeft + ", right stick: " + stickRight);
-    });
-  }
+  // public Command getDrive(double stickLeft, double stickRight) {
+  //   return Commands.run(() -> {
+  //     // Example: Add logic to drive using stickLeft and stickRight xxxxxxxxvalues
+  //     System.out.println("Driving with left stick: " + stickLeft + ", right stick: " + stickRight);
+  //   });
+  // }
 }
