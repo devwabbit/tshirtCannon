@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,8 +41,8 @@ public class RobotContainer {
       double rightStick = controller.getRightY();
       driveSystem.leftDrive(-leftStick*slowmodeval);
       driveSystem.rightDrive(rightStick*slowmodeval);
-      SmartDashboard.putNumber("leftStick", leftStick);
-      SmartDashboard.putNumber("rightStick", rightStick);
+      SmartDashboard.putNumber(" leftStick ", leftStick);
+      SmartDashboard.putNumber(" rightStick ", rightStick);
 
       // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
     }, driveSystem))
@@ -105,9 +104,9 @@ public class RobotContainer {
     ));
   }
 
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
-  }
+  // public Command getAutonomousCommand() {
+  //   return Commands.print("No autonomous command configured");
+  // }
 
 
   public void updateSmartDashboard() {
@@ -130,6 +129,7 @@ public class RobotContainer {
     SmartDashboard.putNumber(" Slow Mode Value ", slowmodeval);
     SmartDashboard.putBoolean(" light OverRide ", lightOverideBol);
     SmartDashboard.putNumber(" Overide Value ", lightOverideVal);
+    SmartDashboard.putNumber(" Turrent Rotations ", turrentSubSystem.returnRotation()); // TODO: COMMENT THIS LINE OUT WHEN RUNNING SIM
   }
 
 

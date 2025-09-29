@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 
@@ -36,6 +37,10 @@ public class turrentSubSystem extends SubsystemBase{
     */
     public void turnTurrent(double turn) {
         turrent.set(turn);
+    }
+
+    public double returnRotation() {
+        return turrent.getEncoder().getPosition();
     }
 
     public void cannonGoUpDown(double upDown) {
