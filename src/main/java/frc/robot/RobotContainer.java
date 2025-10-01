@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,7 +18,14 @@ public class RobotContainer {
   public boolean slowmode = false;
   public double slowmodeval = 1;
   public boolean safetyFire = false;
+  public boolean antiRunaway = false;
   XboxController controller = new XboxController(0);
+
+  //Debug Values
+  public boolean debug = false;
+  public boolean disableDrive = false;
+  public boolean disableFire = false;
+  public boolean setCannonSystemOpen = false;
   
 
   public final driveSubSystem driveSystem = new driveSubSystem();
@@ -27,15 +35,14 @@ public class RobotContainer {
   
   public RobotContainer() {
     configureBindings();
-    updateSmartDashboard();
+    // updateSmartDashboard();
   }
 
   private void configureBindings() {
-    
     //DRIVE
     new Trigger(() -> 
-      Math.abs(controller.getLeftY()) > 0.1 || 
-      Math.abs(controller.getRightY()) > 0.1)
+      Math.abs(controller.getLeftY()) > 0.1 && !antiRunaway || 
+      Math.abs(controller.getRightY()) > 0.1 && !antiRunaway)
     .whileTrue(Commands.run(() -> {
       double leftStick = controller.getLeftY();
       double rightStick = controller.getRightY();
@@ -123,21 +130,43 @@ public class RobotContainer {
     lightSystem.debug(lightOverideBol, lightOverideVal);
 
     // Set Data To Board
+    SmartDashboard.putNumber(" leftStick ", controller.getLeftY());
+    SmartDashboard.putNumber(" rightStick ", controller.getRightY());
+
     SmartDashboard.putNumber(" Current Light Value ", lightSystem.lastSetLightVal);
     SmartDashboard.putBoolean(" Slow Mode ", slowmode);
     SmartDashboard.putBoolean(" Safety Fire ", safetyFire);
     SmartDashboard.putNumber(" Slow Mode Value ", slowmodeval);
     SmartDashboard.putBoolean(" light OverRide ", lightOverideBol);
     SmartDashboard.putNumber(" Overide Value ", lightOverideVal);
-    SmartDashboard.putNumber(" Turrent Rotations ", turrentSubSystem.returnRotation()); // TODO: COMMENT THIS LINE OUT WHEN RUNNING SIM
+    SmartDashboard.putNumber(" Turrent Rotations ", turrentSubSystem.returnRotation());
+
+    debug = SmartDashboard.getBoolean(" Enable Debug ", debug);
+    if (debug) {
+      disableDrive = SmartDashboard.getBoolean(" Disable Drive ", disableDrive);
+      antiRunaway = disableDrive;
+      disableFire  = SmartDashboard.getBoolean(" Disable Cannon Fire ", disableFire);
+      setCannonSystemOpen  = SmartDashboard.getBoolean(" Force Cannon Open  ", setCannonSystemOpen);
+    } else {
+      disableDrive = false;
+      disableFire = false;
+      setCannonSystemOpen = false;
+    }
+    SmartDashboard.putBoolean(" Enable Debug ", debug);
+    SmartDashboard.putBoolean(" Debug ", debug);
+    SmartDashboard.putBoolean(" Disable Drive ", disableDrive);
+    SmartDashboard.putBoolean(" Disable Cannon Fire ", disableFire);
+    SmartDashboard.putBoolean(" Force Cannon Open  ", setCannonSystemOpen);
+    turrentSubSystem.disableFire(disableFire);
+    turrentSubSystem.forceFire(setCannonSystemOpen);
   }
 
-
-
-  // public Command getDrive(double stickLeft, double stickRight) {
-  //   return Commands.run(() -> {
-  //     // Example: Add logic to drive using stickLeft and stickRight xxxxxxxxvalues
-  //     System.out.println("Driving with left stick: " + stickLeft + ", right stick: " + stickRight);
-  //   });
-  // }
+  public void antiDrift() {
+    antiRunaway = false;
+    if (Math.abs(controller.getLeftY()) > 0.05 || Math.abs(controller.getRightY()) > 0.05) {
+      antiRunaway = true;
+      System.err.println("Controller drift detected, replug in controller.");
+      //DriverStation.
+    }
+  }
 }

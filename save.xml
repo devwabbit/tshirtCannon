@@ -1,5 +1,36 @@
 <xml version="1.0">
 <dashboard>
+	<widget field=" Debug " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="-6" y="318"/>
+		<width>187</width>
+		<height>107</height>
+		<property name="Color to show when true" value="255.255.51.255"/>
+	</widget>
+	<widget field=" Disable Drive " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="994" y="14"/>
+	</widget>
+	<widget field=" Disable Cannon Fire " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="963" y="31"/>
+	</widget>
+	<widget field=" Force Cannon Open  " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="965" y="93"/>
+	</widget>
+	<widget field=" Enable Debug " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
+		<location x="991" y="-2"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="148" y="45"/>
+		<property name="Text" value="Connected"/>
+	</static-widget>
+	<widget field=" rightStick " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="325" y="64"/>
+	</widget>
+	<widget field=" leftStick " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="332" y="47"/>
+	</widget>
+	<widget field=" Turrent Rotations " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="287" y="82"/>
+	</widget>
 	<widget field=" light OverRide " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="701" y="79"/>
 	</widget>
@@ -9,7 +40,7 @@
 		<height>107</height>
 	</widget>
 	<widget field=" Slow Mode " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="-6" y="211"/>
+		<location x="-6" y="210"/>
 		<width>209</width>
 		<height>108</height>
 	</widget>
@@ -28,27 +59,14 @@
 		<width>209</width>
 		<height>40</height>
 	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
-		<location x="870" y="0"/>
-	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="-2" y="-1"/>
 		<width>148</width>
 		<height>109</height>
 	</static-widget>
-	<widget field="rightStick" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="335" y="66"/>
-	</widget>
-	<widget field="leftStick" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="339" y="48"/>
-	</widget>
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Slow Mode Value"/>
-	<hidden field="Safety Fire"/>
-	<hidden field="Overide Value"/>
-	<hidden field="Slow Mode"/>
-	<hidden field="Current Light Value"/>
-	<hidden field="light OverRide"/>
+	<hidden field="leftStick"/>
+	<hidden field="rightStick"/>
 </xml>
