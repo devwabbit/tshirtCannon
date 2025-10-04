@@ -23,6 +23,7 @@ public class driveSubSystem extends SubsystemBase {
     public void leftDrive(double speed) {
         left1.set(speed);
         left2.set(speed);
+       // System.out.println(speed);
         // left3.set(speed);
         // left4.set(speed);
     }
@@ -30,6 +31,7 @@ public class driveSubSystem extends SubsystemBase {
     public void rightDrive(double speed) {
         right1.set(speed);
         right2.set(speed);
+        //System.out.println(speed);
         // right3.set(speed);
         // right4.set(speed);
     }

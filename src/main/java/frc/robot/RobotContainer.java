@@ -40,25 +40,20 @@ public class RobotContainer {
 
   private void configureBindings() {
     //DRIVE
-    new Trigger(() -> 
-      Math.abs(controller.getLeftY()) > 0.1 && !antiRunaway || 
-      Math.abs(controller.getRightY()) > 0.1 && !antiRunaway)
-    .whileTrue(Commands.run(() -> {
-      double leftStick = controller.getLeftY();
-      double rightStick = controller.getRightY();
-      driveSystem.leftDrive(-leftStick*slowmodeval);
-      driveSystem.rightDrive(rightStick*slowmodeval);
-      SmartDashboard.putNumber(" leftStick ", leftStick);
-      SmartDashboard.putNumber(" rightStick ", rightStick);
-
-      // driveSystem.drive(leftStick, rightStick); // Call the subsystem's drive method
-    }, driveSystem))
-    .onFalse(
+    driveSystem.setDefaultCommand(
       Commands.run(() -> {
-        driveSystem.leftDrive(0);
-        driveSystem.rightDrive(0);
-      })
+        double left = controller.getLeftY() * slowmodeval * (!antiRunaway ? 1 : 0);
+        double right = controller.getRightY() * slowmodeval * (!antiRunaway ? 1 : 0);
+        driveSystem.leftDrive(left);
+        driveSystem.rightDrive(-right);
+      }, driveSystem)
     );
+    // .onFalse(
+    //   Commands.run(() -> {
+
+    //     driveSystem.rightDrive(0);
+    //   })
+    // );
 
     new Trigger(() -> controller.getStartButtonPressed()).whileTrue(Commands.runOnce(() -> {
       slowmode = !slowmode;
@@ -84,7 +79,7 @@ public class RobotContainer {
     // Fire Cannon
     new Trigger(() -> controller.getLeftTriggerAxis() > .8 ).whileTrue(new InstantCommand(() -> {
       safetyFire = true;
-      lightSystem.setlightMode(-0.11);
+      lightSystem.setlightMode(-.93);
     }));
     new Trigger(() -> controller.getLeftTriggerAxis() < .8).whileTrue(new InstantCommand(() -> {
       safetyFire = false;

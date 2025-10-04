@@ -1,5 +1,38 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="revolutions" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="705"/>
+	</widget>
+	<widget field="Encoder position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="684"/>
+	</widget>
+	<widget field="avg encoder value" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="663"/>
+	</widget>
+	<widget field="AHRS Angle: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="642"/>
+	</widget>
+	<widget field="other y velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="621"/>
+	</widget>
+	<widget field="Last Gyro Update: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="600"/>
+	</widget>
+	<widget field="Z Velocity " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="579"/>
+	</widget>
+	<widget field="Y Velocity " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="558"/>
+	</widget>
+	<widget field="X Velocity " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="537"/>
+	</widget>
+	<widget field="Wrist override?" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="516"/>
+	</widget>
+	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="0" y="426"/>
+	</widget>
 	<widget field=" Debug " type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="-6" y="318"/>
 		<width>187</width>
@@ -67,6 +100,4 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="leftStick"/>
-	<hidden field="rightStick"/>
 </xml>

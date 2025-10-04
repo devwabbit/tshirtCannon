@@ -62,7 +62,8 @@ public class turrentSubSystem extends SubsystemBase{
     }
 
     public double returnRotation() {
-        return turrent.getEncoder().getPosition();
+        return 0;
+        // turrent.getEncoder().getPosition();
     }
 
     public void cannonGoUpDown(double upDown) {
